@@ -10,6 +10,10 @@ GameObject:
   - 4: {fileID: 423560}
   - 212: {fileID: 21201416}
   - 95: {fileID: 9521226}
+  - 58: {fileID: 5826284}
+  - 50: {fileID: 5072354}
+  - 114: {fileID: 11448608}
+  - 114: {fileID: 11436932}
   m_Layer: 0
   m_Name: Fireball
   m_TagString: Untagged
@@ -24,12 +28,43 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 150602}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 42.739506, y: -3.783392, z: 0}
+  m_LocalPosition: {x: 42.739506, y: -3.7833905, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!50 &5072354
+Rigidbody2D:
+  serializedVersion: 2
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 150602}
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
+--- !u!58 &5826284
+CircleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 150602}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: -14.7, y: -1.5}
+  serializedVersion: 2
+  m_Radius: 18.59
 --- !u!95 &9521226
 Animator:
   serializedVersion: 3
@@ -47,6 +82,31 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &11436932
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 150602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dcc1434f4144c64aa1a3bf41a9ca61a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 150
+  horiztonalDirection: -1
+  verticalDirection: 1
+--- !u!114 &11448608
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 150602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bea38622310029246912be4691736e18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &21201416
 SpriteRenderer:
   m_ObjectHideFlags: 1
