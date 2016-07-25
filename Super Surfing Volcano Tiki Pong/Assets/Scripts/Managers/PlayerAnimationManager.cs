@@ -3,14 +3,14 @@ using System.Collections;
 
 public class PlayerAnimationManager : MonoBehaviour {
 
+    public float blockAnimationDuration;
+
     private Animator animator;
     private CollisionState collisionState;
-    private InputState controllableCharacter;
 
     void Awake() {
         animator = GetComponent<Animator>();
         collisionState = GetComponent<CollisionState>();
-        controllableCharacter = GetComponent<InputState>();
     }
 
     // Update is called once per frame
@@ -20,6 +20,9 @@ public class PlayerAnimationManager : MonoBehaviour {
             ChangeAnimationState(0);
         }
         if (!collisionState.surfing) {
+            ChangeAnimationState(1);
+        }
+        if (collisionState.BlockedFB) {
             ChangeAnimationState(1);
         }
     }

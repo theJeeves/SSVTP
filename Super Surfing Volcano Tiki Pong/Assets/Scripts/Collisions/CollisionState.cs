@@ -11,12 +11,18 @@ public class CollisionState : MonoBehaviour {
     public Vector2 bottomPosition = Vector2.zero;
     public float collisionRadius = 10.0f;
 
+    private bool _blockedFB;
+    public bool BlockedFB {
+        get { return _blockedFB; }
+        set { _blockedFB = value; }
+    }
+
     [SerializeField]
     private Color debugCollisionColor = Color.red;
-    private InputState controllableCharacter;
+    //private InputState controllableCharacter;
 
 	void Awake() {
-        controllableCharacter = GetComponent<InputState>();
+        //controllableCharacter = GetComponent<InputState>();
     }
 
     void FixedUpdate() {

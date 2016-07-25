@@ -3,7 +3,7 @@ using System.Collections;
 
 public class FBMovement : MonoBehaviour {
 
-    public static float fbSpeed = 100.0f;
+    public float fbSpeed = 100.0f;
 
     [SerializeField]
     private float horiztonalDirection = -1.0f;
@@ -40,15 +40,33 @@ public class FBMovement : MonoBehaviour {
     }
 
     void OnEnable() {
+        FBCollisionEvent.onSGCollision += FBHitSG;
         FBCollisionEvent.onEnvironmentCollision += FBHitEnvironment;
         FBCollisionEvent.onDamagePlayerCollision += FBHitDamagePlayer;
         FBCollisionEvent.onTikiCollision += FBHitTiki;
     }
 
     void OnDisable() {
+        FBCollisionEvent.onSGCollision -= FBHitSG;
         FBCollisionEvent.onEnvironmentCollision -= FBHitEnvironment;
         FBCollisionEvent.onDamagePlayerCollision -= FBHitDamagePlayer;
         FBCollisionEvent.onTikiCollision -= FBHitTiki;
+    }
+
+    private void FBHitSG(GameObject player) {
+
+        StartCoroutine(BlockAnimationDuration(player));
+        CalculateTan();
+        horiztonalDirection *= -1.0f;
+        ChangeFacingDirection();
+        ChangeRotation();
+    }
+
+    private IEnumerator BlockAnimationDuration(GameObject player) {
+
+        player.GetComponent<CollisionState>().BlockedFB = true;
+        yield return new WaitForSeconds(player.GetComponent<PlayerAnimationManager>().blockAnimationDuration);
+        player.GetComponent<CollisionState>().BlockedFB = false;
     }
 
     private void FBHitEnvironment(GameObject sky) {
@@ -69,6 +87,7 @@ public class FBMovement : MonoBehaviour {
 
     private void FBHitTiki(GameObject tiki) {
 
+        verticalDirection = Random.Range(-1.0f, 1.0f);
         CalculateTan();
         horiztonalDirection *= -1.0f;
         ChangeFacingDirection();
