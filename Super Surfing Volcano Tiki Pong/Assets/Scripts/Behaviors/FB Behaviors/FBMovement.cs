@@ -3,7 +3,9 @@ using System.Collections;
 
 public class FBMovement : MonoBehaviour {
 
-    public float fbSpeed = 100.0f;
+    [SerializeField]
+    private float defaultSpeed = 300.0f;
+    private float fbSpeed;
 
     [SerializeField]
     private float horiztonalDirection = -1.0f;
@@ -16,7 +18,7 @@ public class FBMovement : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
+        fbSpeed = defaultSpeed;
         body2D = GetComponent<Rigidbody2D>();
         verticalDirection = Random.Range(-1.0f, 1.0f);
         CalculateTan();
@@ -35,38 +37,32 @@ public class FBMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+        if (GameManager.Instance.HitLeftWall) {
+            fbSpeed = 0.0f;
+        }
+        else if (GameManager.Instance.HitSurferGirl) {
+            BounceFromSG();
+        }
         body2D.velocity = new Vector2(fbSpeed * horiztonalDirection, fbSpeed * verticalDirection);
     }
 
-    void OnEnable() {
-        FBCollisionEvent.onSGCollision += FBHitSG;
-        FBCollisionEvent.onEnvironmentCollision += FBHitEnvironment;
-        FBCollisionEvent.onDamagePlayerCollision += FBHitDamagePlayer;
-        FBCollisionEvent.onTikiCollision += FBHitTiki;
-    }
+    public void BounceFromSG() {
 
-    void OnDisable() {
-        FBCollisionEvent.onSGCollision -= FBHitSG;
-        FBCollisionEvent.onEnvironmentCollision -= FBHitEnvironment;
-        FBCollisionEvent.onDamagePlayerCollision -= FBHitDamagePlayer;
-        FBCollisionEvent.onTikiCollision -= FBHitTiki;
-    }
-
-    private void FBHitSG(GameObject player) {
-
-        StartCoroutine(BlockAnimationDuration(player));
         CalculateTan();
         horiztonalDirection *= -1.0f;
         ChangeFacingDirection();
         ChangeRotation();
+        GameManager.Instance.HitSurferGirl = false;
     }
 
-    private IEnumerator BlockAnimationDuration(GameObject player) {
+    void OnEnable() {
+        FBCollisionEvent.onEnvironmentCollision += FBHitEnvironment;
+        FBCollisionEvent.onTikiCollision += FBHitTiki;
+    }
 
-        player.GetComponent<CollisionState>().BlockedFB = true;
-        yield return new WaitForSeconds(player.GetComponent<PlayerAnimationManager>().blockAnimationDuration);
-        player.GetComponent<CollisionState>().BlockedFB = false;
+    void OnDisable() {
+        FBCollisionEvent.onEnvironmentCollision -= FBHitEnvironment;
+        FBCollisionEvent.onTikiCollision -= FBHitTiki;
     }
 
     private void FBHitEnvironment(GameObject sky) {
@@ -74,15 +70,6 @@ public class FBMovement : MonoBehaviour {
         CalculateTan();
         verticalDirection *= -1.0f;
         ChangeRotation();
-    }
-
-    private void FBHitDamagePlayer(GameObject playerDamage) {
-
-        CalculateTan();
-        horiztonalDirection *= -1.0f;
-        ChangeFacingDirection();
-        ChangeRotation();
-
     }
 
     private void FBHitTiki(GameObject tiki) {

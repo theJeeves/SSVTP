@@ -24,10 +24,16 @@ public class PlayerAnimationManager : MonoBehaviour {
         }
         if (collisionState.BlockedFB) {
             ChangeAnimationState(1);
+            StartCoroutine(BlockAnimationDelay());
         }
     }
 
     void ChangeAnimationState(int animationNum) {
         animator.SetInteger("AnimationState", animationNum);
+    }
+
+    private IEnumerator BlockAnimationDelay() {
+        yield return new WaitForSeconds(blockAnimationDuration);
+        collisionState.BlockedFB = false;
     }
 }

@@ -45,8 +45,7 @@ MonoBehaviour:
     offValue: 0
     button: 0
     condition: 0
-  controllableCharacter: {fileID: 11455908, guid: 125b56ace32289c48bc3c532ca09ea63,
-    type: 2}
+  controllableCharacter: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

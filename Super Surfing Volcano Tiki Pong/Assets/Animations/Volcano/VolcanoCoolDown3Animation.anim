@@ -5,7 +5,7 @@ AnimationClip:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: FireballDestroyAnimation
+  m_Name: VolcanoCoolDown3Animation
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -19,18 +19,14 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 21300000, guid: 5d9dfade01a68fa4d85ef1b440c3981f, type: 3}
-    - time: 0.16666667
-      value: {fileID: 21300000, guid: 5e70ecab9179bdb42a34edbd4310ebe0, type: 3}
-    - time: 0.33333334
-      value: {fileID: 21300000, guid: 17d5cdab1f54747438b3a4724be18f6c, type: 3}
-    - time: 0.5
-      value: {fileID: 21300000, guid: 38378f2d91bbd734d9c1dafefb3253af, type: 3}
+      value: {fileID: 21300000, guid: e6d45f98d2b5adb44811887e087268b8, type: 3}
+    - time: 0.25
+      value: {fileID: 21300000, guid: c1d6b5e7f72961049ac46f2347b8d184, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
     script: {fileID: 0}
-  m_SampleRate: 6
+  m_SampleRate: 4
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -44,21 +40,19 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: 21300000, guid: 5d9dfade01a68fa4d85ef1b440c3981f, type: 3}
-    - {fileID: 21300000, guid: 5e70ecab9179bdb42a34edbd4310ebe0, type: 3}
-    - {fileID: 21300000, guid: 17d5cdab1f54747438b3a4724be18f6c, type: 3}
-    - {fileID: 21300000, guid: 38378f2d91bbd734d9c1dafefb3253af, type: 3}
+    - {fileID: 21300000, guid: e6d45f98d2b5adb44811887e087268b8, type: 3}
+    - {fileID: 21300000, guid: c1d6b5e7f72961049ac46f2347b8d184, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.6666667
+    m_StopTime: 0.5
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
     m_HasAdditiveReferencePose: 0
-    m_LoopTime: 1
+    m_LoopTime: 0
     m_LoopBlend: 0
     m_LoopBlendOrientation: 0
     m_LoopBlendPositionY: 0

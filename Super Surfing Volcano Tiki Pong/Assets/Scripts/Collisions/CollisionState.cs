@@ -19,10 +19,8 @@ public class CollisionState : MonoBehaviour {
 
     [SerializeField]
     private Color debugCollisionColor = Color.red;
-    //private InputState controllableCharacter;
 
 	void Awake() {
-        //controllableCharacter = GetComponent<InputState>();
     }
 
     void FixedUpdate() {

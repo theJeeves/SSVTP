@@ -8,6 +8,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 433908}
+  - 114: {fileID: 11445042}
   m_Layer: 0
   m_Name: Fireball Spawn
   m_TagString: Untagged
@@ -118,6 +119,18 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &11445042
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 171930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7b2400aef463cc48bc8a9803f11adb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Fireball: {fileID: 150602, guid: 208c82eb209cc974e8ff4e6857a0962b, type: 2}
 --- !u!212 &21247900
 SpriteRenderer:
   m_ObjectHideFlags: 1
