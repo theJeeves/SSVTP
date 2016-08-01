@@ -5,35 +5,35 @@ public class Jump : AbstractBehavior {
 
     public float jumpSpeed = 50.0f;
 
-    private bool hitSky = false;
-    private float pressedTime = 0.0f;
+    private bool _hitSky = false;
+    private float _pressedTime = 0.0f;
 	
 	// Update is called once per frame
 	void Update () {
 
         if (collisionState.hitSky) {
-            hitSky = true;
+            _hitSky = true;
         }
 
-        if (!hitSky) {
-            if (collisionState.surfing || pressedTime > 0.0f) {
+        if (!_hitSky) {
+            if (collisionState.surfing || _pressedTime > 0.0f) {
                 bool canJump = controllableCharacter.GetButtonPressed(inputButtons[0]);
-                pressedTime = controllableCharacter.GetButtonPressTime(inputButtons[0]);
+                _pressedTime = controllableCharacter.GetButtonPressTime(inputButtons[0]);
 
                 if (canJump) {
                     OnJump();
                 }
             }
-            else if (!collisionState.surfing || pressedTime <= 0.0f) {
+            else if (!collisionState.surfing || _pressedTime <= 0.0f) {
                 DriftDown();
             }
         }
-        else if (hitSky) {
+        else if (_hitSky) {
             DriftDown();
         }
 
         if (collisionState.surfing) {
-            hitSky = false;
+            _hitSky = false;
         }
 	}
 

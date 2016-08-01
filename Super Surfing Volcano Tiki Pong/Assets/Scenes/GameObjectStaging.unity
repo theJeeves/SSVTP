@@ -258,6 +258,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Fireball: {fileID: 150602, guid: 208c82eb209cc974e8ff4e6857a0962b, type: 2}
   FBSpawnPos: {fileID: 839667920}
+--- !u!114 &680924352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 680924346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 505c6e6e65deb8e4cb3d498ac012384c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageDelay: 0.25
 --- !u!1 &764973248 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 105856, guid: 125b56ace32289c48bc3c532ca09ea63, type: 2}

@@ -5,35 +5,35 @@ public class PlayerAnimationManager : MonoBehaviour {
 
     public float blockAnimationDuration;
 
-    private Animator animator;
-    private CollisionState collisionState;
+    private Animator _animator;
+    private CollisionState _collisionState;
 
     void Awake() {
-        animator = GetComponent<Animator>();
-        collisionState = GetComponent<CollisionState>();
+        _animator = GetComponent<Animator>();
+        _collisionState = GetComponent<CollisionState>();
     }
 
     // Update is called once per frame
     void Update() {
 
-        if (collisionState.surfing) {
+        if (_collisionState.surfing) {
             ChangeAnimationState(0);
         }
-        if (!collisionState.surfing) {
+        if (!_collisionState.surfing) {
             ChangeAnimationState(1);
         }
-        if (collisionState.BlockedFB) {
+        if (_collisionState.BlockedFB) {
             ChangeAnimationState(1);
             StartCoroutine(BlockAnimationDelay());
         }
     }
 
     void ChangeAnimationState(int animationNum) {
-        animator.SetInteger("AnimationState", animationNum);
+        _animator.SetInteger("AnimationState", animationNum);
     }
 
     private IEnumerator BlockAnimationDelay() {
         yield return new WaitForSeconds(blockAnimationDuration);
-        collisionState.BlockedFB = false;
+        _collisionState.BlockedFB = false;
     }
 }

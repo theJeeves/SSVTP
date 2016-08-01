@@ -5,45 +5,55 @@ public class FBMovement : MonoBehaviour {
 
     [SerializeField]
     private float defaultSpeed = 300.0f;
-    private float fbSpeed;
+    private float _fbSpeed;
 
     [SerializeField]
     private float horiztonalDirection = -1.0f;
     [SerializeField]
     private float verticalDirection = 1.0f;
 
-    private Rigidbody2D body2D;
-    private float tan;
-    private float angle;
+    private GameManager _gameManager;
+    private Rigidbody2D _body2D;
+    private float _tan;
+    private float _angle;
+
+    void Awake() {
+        _gameManager = GameManager.Instance;
+        _body2D = GetComponent<Rigidbody2D>();
+    }
 
 	// Use this for initialization
 	void Start () {
-        fbSpeed = defaultSpeed;
-        body2D = GetComponent<Rigidbody2D>();
+        _fbSpeed = defaultSpeed;
         verticalDirection = Random.Range(-1.0f, 1.0f);
         CalculateTan();
 
-        angle = Mathf.Rad2Deg * Mathf.Atan(tan);
+        _angle = Mathf.Rad2Deg * Mathf.Atan(_tan);
 
-        if (angle > 45) {
-            angle = 90 - angle;
+        if (_angle > 45) {
+            _angle = 90 - _angle;
         }
-        else if (angle < -45) {
-            angle = 90 + angle;
+        else if (_angle < -45) {
+            _angle = 90 + _angle;
         }
 
-        transform.localRotation = Quaternion.Euler(0, 0, angle);
+        transform.localRotation = Quaternion.Euler(0, 0, _angle);
     }
 	
 	// Update is called once per frame
 	void Update () {
-        if (GameManager.Instance.HitLeftWall) {
-            fbSpeed = 0.0f;
+        if (_gameManager.GameState == GameStates.Playing) {
+            if (_gameManager.HitLeftWall) {
+                _fbSpeed = 0.0f;
+            }
+            else if (_gameManager.HitSurferGirl) {
+                BounceFromSG();
+            }
+            else if (_gameManager.HitTiki) {
+                FBHitTiki();
+            }
+            _body2D.velocity = new Vector2(_fbSpeed * horiztonalDirection, _fbSpeed * verticalDirection);
         }
-        else if (GameManager.Instance.HitSurferGirl) {
-            BounceFromSG();
-        }
-        body2D.velocity = new Vector2(fbSpeed * horiztonalDirection, fbSpeed * verticalDirection);
     }
 
     public void BounceFromSG() {
@@ -52,17 +62,25 @@ public class FBMovement : MonoBehaviour {
         horiztonalDirection *= -1.0f;
         ChangeFacingDirection();
         ChangeRotation();
-        GameManager.Instance.HitSurferGirl = false;
+        _gameManager.HitSurferGirl = false;
+    }
+
+    private void FBHitTiki() {
+
+        verticalDirection = Random.Range(-1.0f, 1.0f);
+        CalculateTan();
+        horiztonalDirection *= -1.0f;
+        ChangeFacingDirection();
+        ChangeRotation();
+        _gameManager.HitTiki = false;
     }
 
     void OnEnable() {
         FBCollisionEvent.onEnvironmentCollision += FBHitEnvironment;
-        FBCollisionEvent.onTikiCollision += FBHitTiki;
     }
 
     void OnDisable() {
         FBCollisionEvent.onEnvironmentCollision -= FBHitEnvironment;
-        FBCollisionEvent.onTikiCollision -= FBHitTiki;
     }
 
     private void FBHitEnvironment(GameObject sky) {
@@ -72,22 +90,13 @@ public class FBMovement : MonoBehaviour {
         ChangeRotation();
     }
 
-    private void FBHitTiki(GameObject tiki) {
-
-        verticalDirection = Random.Range(-1.0f, 1.0f);
-        CalculateTan();
-        horiztonalDirection *= -1.0f;
-        ChangeFacingDirection();
-        ChangeRotation();
-    }
-
     private void CalculateTan() {
 
         if (verticalDirection > 0) {
-            tan = verticalDirection / horiztonalDirection;
+            _tan = verticalDirection / horiztonalDirection;
         }
         else if (verticalDirection < 0) {
-            tan = horiztonalDirection / verticalDirection;
+            _tan = horiztonalDirection / verticalDirection;
         }
     }
 
@@ -97,15 +106,15 @@ public class FBMovement : MonoBehaviour {
 
     private void ChangeRotation() {
 
-        angle = -1 * Mathf.Rad2Deg * Mathf.Atan(tan);
+        _angle = -1 * Mathf.Rad2Deg * Mathf.Atan(_tan);
 
-        if (angle > 45) {
-            angle = 90 - angle > 0 ? 90 - angle : angle;
+        if (_angle > 45) {
+            _angle = 90 - _angle > 0 ? 90 - _angle : _angle;
         }
-        else if (angle < -45) {
-            angle = -1 * (90 + angle);
+        else if (_angle < -45) {
+            _angle = -1 * (90 + _angle);
         }
 
-        transform.localRotation = Quaternion.Euler(0, 0, angle);
+        transform.localRotation = Quaternion.Euler(0, 0, _angle);
     }
 }
