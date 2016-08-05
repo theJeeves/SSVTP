@@ -31,6 +31,10 @@ public class FBAnimationManager : MonoBehaviour {
             ChangeAnimationState(1);
             Destroy(gameObject, FBDestoryAnimation.length);
         }
+        else if (_gameManager.GameState == GameStates.GameOver) {
+            ChangeAnimationState(1);
+            Destroy(gameObject, FBDestoryAnimation.length);
+        }
 	}
 
     void OnEnable() {

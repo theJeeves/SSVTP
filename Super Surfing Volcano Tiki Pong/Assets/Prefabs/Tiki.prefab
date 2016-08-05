@@ -8,11 +8,10 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 433908}
-  - 114: {fileID: 11445042}
   m_Layer: 0
   m_Name: Fireball Spawn
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -27,6 +26,8 @@ GameObject:
   - 212: {fileID: 21247900}
   - 95: {fileID: 9502814}
   - 60: {fileID: 6061336}
+  - 114: {fileID: 11486500}
+  - 114: {fileID: 11465432}
   m_Layer: 0
   m_Name: Tiki
   m_TagString: Tiki
@@ -55,7 +56,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 171930}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -49.6, y: -49.2, z: 0}
+  m_LocalPosition: {x: -57.2, y: -50, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -119,18 +120,31 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &11445042
+--- !u!114 &11465432
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 171930}
+  m_GameObject: {fileID: 184446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 505c6e6e65deb8e4cb3d498ac012384c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageDelay: 0.25
+--- !u!114 &11486500
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 184446}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7b2400aef463cc48bc8a9803f11adb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Fireball: {fileID: 150602, guid: 208c82eb209cc974e8ff4e6857a0962b, type: 2}
+  FBSpawnPos: {fileID: 171930}
 --- !u!212 &21247900
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -54,6 +54,10 @@ public class FBMovement : MonoBehaviour {
             }
             _body2D.velocity = new Vector2(_fbSpeed * horiztonalDirection, _fbSpeed * verticalDirection);
         }
+        else if (_gameManager.GameState == GameStates.Won ||
+            _gameManager.GameState == GameStates.GameOver) {
+            _body2D.velocity = Vector2.zero;
+        }
     }
 
     public void BounceFromSG() {

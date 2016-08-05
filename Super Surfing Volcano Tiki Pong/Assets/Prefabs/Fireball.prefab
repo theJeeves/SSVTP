@@ -15,6 +15,7 @@ GameObject:
   - 114: {fileID: 11448608}
   - 114: {fileID: 11436932}
   - 114: {fileID: 11450258}
+  - 114: {fileID: 11482774}
   m_Layer: 0
   m_Name: Fireball
   m_TagString: Untagged
@@ -94,7 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dcc1434f4144c64aa1a3bf41a9ca61a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fbSpeed: 300
+  defaultSpeed: 300
   horiztonalDirection: -1
   verticalDirection: 1
 --- !u!114 &11448608
@@ -120,6 +121,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FBDestoryAnimation: {fileID: 7400000, guid: cfd4375bd51920349bdd19da86a098d3, type: 2}
+--- !u!114 &11482774
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 150602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 150fcea43e1b73b4f8176b262dddb6b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &21201416
 SpriteRenderer:
   m_ObjectHideFlags: 1

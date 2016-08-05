@@ -20,7 +20,6 @@ public class GameManager : Singleton<GameManager> {
         set { _tikiHP = value; }
     }
 
-    [SerializeField]
     private bool _tikiDamageTaken;
     public bool TikiDamageTaken {
         get { return _tikiDamageTaken; }
