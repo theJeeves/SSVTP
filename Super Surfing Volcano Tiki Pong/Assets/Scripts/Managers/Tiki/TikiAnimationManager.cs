@@ -20,7 +20,7 @@ public class TikiAnimationManager : MonoBehaviour {
         if (_gameManager.GameState == GameStates.Playing) {
 
             if (_gameManager.HitTiki) {
-                _gameManager.TikiDamageTaken = _gameManager.TikiHP % 3 == 0 ? true : false;
+                _gameManager.TikiDamageTaken = _gameManager.TikiHP % 33 == 0 ? true : false;
             }
             if (!_gameManager.TikiDamageTaken) {
                 ChangeAnimationState(0);
@@ -30,6 +30,9 @@ public class TikiAnimationManager : MonoBehaviour {
                 StartCoroutine(DamageDelay());
             }
         }
+        else if (_gameManager.GameState == GameStates.Won) {
+            ChangeAnimationState(2);
+        }
 	}
 
     private void ChangeAnimationState(int animationState) {
@@ -38,7 +41,6 @@ public class TikiAnimationManager : MonoBehaviour {
 
     private IEnumerator DamageDelay() {
         yield return new WaitForSeconds(damageDelay);
-        _gameManager.HitTiki = false;
         _gameManager.TikiDamageTaken = false;
     }
 }

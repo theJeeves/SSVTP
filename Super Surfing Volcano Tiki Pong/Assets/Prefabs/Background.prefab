@@ -11,7 +11,6 @@ GameObject:
   - 33: {fileID: 3331820}
   - 23: {fileID: 2397304}
   - 114: {fileID: 11482938}
-  - 114: {fileID: 11454784}
   m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
@@ -75,7 +74,7 @@ Transform:
   m_GameObject: {fileID: 101554}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 2}
-  m_LocalScale: {x: 480, y: 360, z: 1}
+  m_LocalScale: {x: 768, y: 432, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 473940}
@@ -200,19 +199,6 @@ EdgeCollider2D:
   m_Points:
   - {x: -0.5, y: 0}
   - {x: 0.5, y: 0}
---- !u!114 &11454784
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 101554}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc39e0b86aea9a240887499b3f837301, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  volcanoSpawnPos: {fileID: 0}
-  volcano: {fileID: 128278, guid: 345ea43aee9945549a7307b67a8ec29e, type: 2}
 --- !u!114 &11482938
 MonoBehaviour:
   m_ObjectHideFlags: 1

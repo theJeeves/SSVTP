@@ -9,7 +9,7 @@ public enum GameStates {
 
 public class GameManager : Singleton<GameManager> {
 
-    private int _maxTikiHealth = 9;
+    private int _maxTikiHealth = 165;
     private int _maxVolcanoHealth = 3;
     private float resetDelay = 1.0f;
 
@@ -59,8 +59,8 @@ public class GameManager : Singleton<GameManager> {
         get { return _volcanoHealth; }
     }
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    public override void Awake () {
         _reset = true;
         _gameState = 0;
         _hitSurferGirl = false;
@@ -99,8 +99,8 @@ public class GameManager : Singleton<GameManager> {
 
     private void DecrementTikiHealth(GameObject tiki) {
         _hitTiki = true;
-
-        if (--_tikiHP <= 0) {
+        _tikiHP -= 11;
+        if (_tikiHP <= 0) {
             _gameState = GameStates.Won;
         }
     }

@@ -26,7 +26,9 @@ public class CollisionState : MonoBehaviour {
     void FixedUpdate() {
         Vector2 position = bottomPosition;
         position.x += transform.position.x;
+        //position.x += transform.position.x;
         position.y += transform.position.y;
+        //position.y += transform.position.y;
         surfing = Physics2D.OverlapCircle(position, collisionRadius, oceanLayer);
 
         position = topPosition;
