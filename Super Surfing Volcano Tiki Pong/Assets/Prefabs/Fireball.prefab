@@ -31,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 150602}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 42.739506, y: -3.7833905, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
@@ -66,7 +66,7 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_Offset: {x: -14.7, y: -1.5}
   serializedVersion: 2
-  m_Radius: 18.59
+  m_Radius: 17
 --- !u!95 &9521226
 Animator:
   serializedVersion: 3
@@ -95,7 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dcc1434f4144c64aa1a3bf41a9ca61a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultSpeed: 300
+  defaultSpeed: 100
   horiztonalDirection: -1
   verticalDirection: 1
 --- !u!114 &11448608

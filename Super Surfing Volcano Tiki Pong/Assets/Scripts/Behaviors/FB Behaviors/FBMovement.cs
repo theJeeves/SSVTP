@@ -5,13 +5,13 @@ public class FBMovement : MonoBehaviour {
 
     [SerializeField]
     private float defaultSpeed = 300.0f;
-    private float _fbSpeed;
 
     [SerializeField]
     private float horiztonalDirection = -1.0f;
     [SerializeField]
     private float verticalDirection = 1.0f;
 
+    private float _fbSpeed;
     private GameManager _gameManager;
     private Rigidbody2D _body2D;
     private float _tan;
@@ -105,7 +105,8 @@ public class FBMovement : MonoBehaviour {
     }
 
     private void ChangeFacingDirection() {
-        transform.localScale = new Vector3(-horiztonalDirection, 1, 1);
+        transform.localScale = new Vector3(-transform.localScale.x,
+            transform.localScale.y, 1);
     }
 
     private void ChangeRotation() {

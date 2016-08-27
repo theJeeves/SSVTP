@@ -4,7 +4,8 @@ using System.Collections;
 public enum GameStates {
     GameOver = -1,
     Playing = 0,
-    Won = 1
+    Won = 1,
+    Paused = 10
 }
 
 public class GameManager : Singleton<GameManager> {
@@ -54,13 +55,17 @@ public class GameManager : Singleton<GameManager> {
     public bool HitLeftWall {
         get { return _hitLeftWall; }
     }
+
     private int _volcanoHealth;
     public int VolcanoHealth {
         get { return _volcanoHealth; }
     }
 
+    private float _defaultTimeScale;
+
     // Use this for initialization
     public override void Awake () {
+        base.Awake();
         _reset = true;
         _gameState = 0;
         _hitSurferGirl = false;
@@ -68,9 +73,31 @@ public class GameManager : Singleton<GameManager> {
         _volcanoHealth = _maxVolcanoHealth;
         _tikiDamageTaken = false;
         _tikiHP = _maxTikiHealth;
+        _defaultTimeScale = 1.0f;
 	}
-	
-	void OnEnable() {
+
+    void Start() {
+        ToggleGameObjects();
+    }
+
+    public void RestartGame() {
+
+    }
+
+    public void PauseGame() {
+        Time.timeScale = 0.0f;
+    }
+
+    public void ResumeGame() {
+        Time.timeScale = _defaultTimeScale;
+    }
+
+    private void ToggleGameObjects() {
+        GameObject.Find("Tiki").SetActive(false);
+        GameObject.Find("UI").SetActive(false);
+    }
+
+    void OnEnable() {
         FBCollisionEvent.onDamagePlayerCollision += DecrementVolcanoHealth;
         FBCollisionEvent.onSGCollision += BounceFB;
         FBCollisionEvent.onTikiCollision += DecrementTikiHealth;
