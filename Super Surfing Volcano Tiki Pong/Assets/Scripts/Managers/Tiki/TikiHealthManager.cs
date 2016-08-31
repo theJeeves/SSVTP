@@ -18,7 +18,6 @@ public class TikiHealthManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
         tikiHealth.minValue = 0;
         tikiHealth.maxValue = _gameManager.TikiHP;
         tikiHealth.wholeNumbers = true;
@@ -42,6 +41,13 @@ public class TikiHealthManager : MonoBehaviour {
         }
 	}
 
+    private void OnEnable() {
+        _gameManager.TikiHP = _gameManager.MaxTikiHealth;
+        tikiHealth.value = tikiHealth.maxValue;
+        healthColor = new Color(0.0f, 1.0f, 0.0f, 1.0f);
+        FillRectColor();
+    }
+
     private void DecrementHealthValue() {
         tikiHealth.value -= 33;
     }
@@ -54,6 +60,10 @@ public class TikiHealthManager : MonoBehaviour {
             healthColor.g -= .5f;
         }
 
+        FillRectColor();
+    }
+
+    private void FillRectColor() {
         fillRect.GetComponentInChildren<Image>().color = healthColor;
     }
 }

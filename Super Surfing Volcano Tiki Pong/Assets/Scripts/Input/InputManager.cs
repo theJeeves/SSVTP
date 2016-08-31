@@ -36,10 +36,14 @@ public class InputAxisState {
 public class InputManager : MonoBehaviour {
     public InputAxisState[] inputs;
     public InputState controllableCharacter;
-	
-	// Update is called once per frame
-	void Update () {
-	    foreach(InputAxisState input in inputs) {
+
+    void Start() {
+    }
+
+    // Update is called once per frame
+    void Update () {
+
+        foreach (InputAxisState input in inputs) {
             controllableCharacter.SetButtonState(input.button, input.axisInputValue);
         }
 	}

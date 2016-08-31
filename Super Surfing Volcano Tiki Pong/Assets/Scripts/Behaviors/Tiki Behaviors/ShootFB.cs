@@ -7,13 +7,19 @@ public class ShootFB : MonoBehaviour {
     private GameObject Fireball;
     [SerializeField]
     private GameObject FBSpawnPos;
+
+    private GameManager _gameManager;
+
+    void Start() {
+        _gameManager = GameManager.Instance;
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        if (GameManager.Instance.GameState == 0) {
-            if (GameManager.Instance.Reset) {
+        if (_gameManager.GameState == GameStates.Playing) {
+            if (GameManager.Instance.ResetAttack) {
                 Instantiate(Fireball, FBSpawnPos.transform.position, Quaternion.identity);
-                GameManager.Instance.Reset = false;
+                GameManager.Instance.ResetAttack = false;
             }
         }
 	}

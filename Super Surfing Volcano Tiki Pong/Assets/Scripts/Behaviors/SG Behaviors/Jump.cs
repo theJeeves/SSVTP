@@ -7,33 +7,40 @@ public class Jump : AbstractBehavior {
 
     private bool _hitSky = false;
     private float _pressedTime = 0.0f;
+    private GameManager _gameManager;
+
+    void Start() {
+        _gameManager = GameManager.Instance;
+    }
 	
 	// Update is called once per frame
 	void Update () {
 
-        if (collisionState.hitSky) {
-            _hitSky = true;
-        }
+        if (_gameManager.GameState == GameStates.Playing) {
+            if (collisionState.hitSky) {
+                _hitSky = true;
+            }
 
-        if (!_hitSky) {
-            if (collisionState.surfing || _pressedTime > 0.0f) {
-                bool canJump = controllableCharacter.GetButtonPressed(inputButtons[0]);
-                _pressedTime = controllableCharacter.GetButtonPressTime(inputButtons[0]);
+            if (!_hitSky) {
+                if (collisionState.surfing || _pressedTime > 0.0f) {
+                    bool canJump = controllableCharacter.GetButtonPressed(inputButtons[0]);
+                    _pressedTime = controllableCharacter.GetButtonPressTime(inputButtons[0]);
 
-                if (canJump) {
-                    OnJump();
+                    if (canJump) {
+                        OnJump();
+                    }
+                }
+                else if (!collisionState.surfing || _pressedTime <= 0.0f) {
+                    DriftDown();
                 }
             }
-            else if (!collisionState.surfing || _pressedTime <= 0.0f) {
+            else if (_hitSky) {
                 DriftDown();
             }
-        }
-        else if (_hitSky) {
-            DriftDown();
-        }
 
-        if (collisionState.surfing) {
-            _hitSky = false;
+            if (collisionState.surfing) {
+                _hitSky = false;
+            }
         }
 	}
 

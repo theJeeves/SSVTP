@@ -5,14 +5,18 @@ public enum GameStates {
     GameOver = -1,
     Playing = 0,
     Won = 1,
-    Paused = 10
+    Paused = 10,
+    InMenu = 5
 }
 
 public class GameManager : Singleton<GameManager> {
 
-    private int _maxTikiHealth = 165;
+    public delegate void GameManagerEvent();
+    public static event GameManagerEvent GameOver;
+
     private int _maxVolcanoHealth = 3;
-    private float resetDelay = 1.0f;
+    private float _attackDelay = 1.0f;
+    private float _gameResetDelay = 5.0f;
 
     [SerializeField]
     private int _tikiHP;
@@ -21,18 +25,24 @@ public class GameManager : Singleton<GameManager> {
         set { _tikiHP = value; }
     }
 
+    private int _maxTikiHealth;
+    public int MaxTikiHealth {
+        get { return _maxTikiHealth; }
+    }
+
     private bool _tikiDamageTaken;
     public bool TikiDamageTaken {
         get { return _tikiDamageTaken; }
         set { _tikiDamageTaken = value; }
     }
 
-    private bool _reset;
-    public bool Reset {
-        get { return _reset; }
-        set { _reset = value; }
+    private bool _resetAttack;
+    public bool ResetAttack {
+        get { return _resetAttack; }
+        set { _resetAttack = value; }
     }
 
+    [SerializeField]
     private GameStates _gameState;
     public GameStates GameState {
         get { return _gameState; }
@@ -66,35 +76,16 @@ public class GameManager : Singleton<GameManager> {
     // Use this for initialization
     public override void Awake () {
         base.Awake();
-        _reset = true;
-        _gameState = 0;
-        _hitSurferGirl = false;
-        _hitLeftWall = false;
-        _volcanoHealth = _maxVolcanoHealth;
-        _tikiDamageTaken = false;
-        _tikiHP = _maxTikiHealth;
-        _defaultTimeScale = 1.0f;
-	}
-
-    void Start() {
-        ToggleGameObjects();
+        ResetGame();
     }
 
-    public void RestartGame() {
-
-    }
-
-    public void PauseGame() {
-        Time.timeScale = 0.0f;
-    }
-
-    public void ResumeGame() {
-        Time.timeScale = _defaultTimeScale;
-    }
-
-    private void ToggleGameObjects() {
-        GameObject.Find("Tiki").SetActive(false);
-        GameObject.Find("UI").SetActive(false);
+    void Update() {
+        if (_gameState == GameStates.Paused) {
+            Time.timeScale = 0.0f;
+        }
+        else {
+            Time.timeScale = _defaultTimeScale;
+        }
     }
 
     void OnEnable() {
@@ -109,13 +100,27 @@ public class GameManager : Singleton<GameManager> {
         FBCollisionEvent.onTikiCollision -= DecrementTikiHealth;
     }
 
+    public void ResetGame() {
+        _gameState = GameStates.InMenu;
+        _resetAttack = false;
+        _gameState = 0;
+        _hitSurferGirl = false;
+        _hitLeftWall = false;
+        _volcanoHealth = _maxVolcanoHealth;
+        _tikiDamageTaken = false;
+        _maxTikiHealth = 165;
+        _tikiHP = _maxTikiHealth;
+        _defaultTimeScale = 1.0f;
+    }
+
     private void DecrementVolcanoHealth(GameObject leftWall) {
         _hitLeftWall = true;
         if (--_volcanoHealth < 0) {
             _gameState = GameStates.GameOver;
+            GameOver();
         }
         else {
-            StartCoroutine(ResetDelay());
+            StartCoroutine(ResetDelay(_attackDelay));
         }
     }
 
@@ -132,9 +137,9 @@ public class GameManager : Singleton<GameManager> {
         }
     }
 
-    private IEnumerator ResetDelay() {
-        yield return new WaitForSeconds(resetDelay);
+    private IEnumerator ResetDelay(float delay) {
+        yield return new WaitForSeconds(delay);
         _hitLeftWall = false;
-        _reset = true;
+        _resetAttack = true;
     }
 }

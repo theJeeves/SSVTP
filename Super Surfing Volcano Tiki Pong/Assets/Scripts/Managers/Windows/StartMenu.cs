@@ -3,8 +3,11 @@ using System.Collections;
 
 public class StartMenu : GenericWindow {
 
-	// Use this for initialization
-	void Start () {
+    public delegate void StartGame();
+    public static event StartGame OnStartGame;
+
+    // Use this for initialization
+    void Start () {
 	
 	}
 	
@@ -15,11 +18,12 @@ public class StartMenu : GenericWindow {
 
     public override void Open() {
         base.Open();
+        _gameManager.GameState = GameStates.InMenu;
     }
 
     public override void Close() {
         base.Close();
-        _gameManager.ResumeGame();
-        _gameManager.GameState = GameStates.Playing;
+        OnStartGame();
+        _gameManager.ResetAttack = true;
     }
 }

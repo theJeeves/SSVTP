@@ -35,10 +35,10 @@ public class WindowManager : Singleton<WindowManager> {
     }
 
 	// Use this for initialization
-	void Start () {
+	public override void Awake () {
         _gameManager = GameManager.Instance;
         Open(defaultWindowID);
-	}
+    }
 
     void Update() {
         if (_gameManager.GameState == GameStates.Playing) {
