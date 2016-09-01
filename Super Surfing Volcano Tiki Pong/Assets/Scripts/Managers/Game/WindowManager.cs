@@ -13,43 +13,63 @@ public class WindowManager : Singleton<WindowManager> {
     [SerializeField]
     private GenericWindow[] windows;
 
-    public GenericWindow GetWindow(int windowID) {
-        return windows[windowID];
+    private void OnEnable() {
+        StartMenu.OnStartGame += ToggleWindows;
+        StartMenu.OnCredits += ToggleWindows;
+        PauseMenu.OnReturnToMainMenu += ToggleWindows;
+        PauseMenu.OnResume += ToggleWindows;
     }
 
-    private void ToggleVisability(int windowID) {
-        if (windows[windowID].gameObject.activeInHierarchy) {
-            windows[windowID].Close();
-        }
-        else if (!windows[windowID].gameObject.activeInHierarchy) {
-            windows[windowID].Open();
-        }
+    private void OnDisable() {
+        StartMenu.OnStartGame -= ToggleWindows;
+        StartMenu.OnCredits -= ToggleWindows;
+        PauseMenu.OnReturnToMainMenu -= ToggleWindows;
+        PauseMenu.OnResume -= ToggleWindows;
     }
 
-    public GenericWindow Open(WindowIDs windowID) {
-
-        currentWindowID = windowID;
-        ToggleVisability((int)currentWindowID);
-
-        return GetWindow((int)currentWindowID);
-    }
-
-	// Use this for initialization
-	public override void Awake () {
+    public override void Awake() {
         _gameManager = GameManager.Instance;
-        Open(defaultWindowID);
+        ToggleWindows(WindowIDs.None, WindowIDs.StartWindow);
     }
 
     void Update() {
-        if (_gameManager.GameState == GameStates.Playing) {
+        if (_gameManager.GameState == GameStates.Playing ||
+            _gameManager.GameState == GameStates.Paused) {
+
             if (Input.GetKeyDown(KeyCode.Escape)) {
+
                 if (!windows[(int)WindowIDs.PauseWindow].gameObject.activeInHierarchy) {
-                    windows[(int)WindowIDs.PauseWindow].Open();
+                    ToggleWindows(WindowIDs.None, WindowIDs.PauseWindow);
+                    _gameManager.GameState = GameStates.Paused;
                 }
                 else if (windows[(int)WindowIDs.PauseWindow].gameObject.activeInHierarchy) {
-                    windows[(int)WindowIDs.PauseWindow].Close();
+                    ToggleWindows(WindowIDs.PauseWindow, WindowIDs.None);
+                    _gameManager.GameState = GameStates.Playing;
                 }
             }
+        }
+        if (_gameManager.GameState == GameStates.InMenu) {
+
+            if (Input.anyKeyDown) {
+                if (currentWindowID == WindowIDs.Credits || currentWindowID == WindowIDs.Options) {
+                    ToggleWindows(currentWindowID, WindowIDs.StartWindow);
+                }
+            }
+        }
+    }
+
+    //public GenericWindow GetWindow(WindowIDs windowID) {
+    //    return windows[(int)windowID];
+    //}
+
+    private void ToggleWindows(WindowIDs close, WindowIDs open) {
+        if (close != WindowIDs.None) {
+            windows[(int)close].Close();
+        }
+        currentWindowID = open;
+
+        if (currentWindowID != WindowIDs.None) {
+            windows[(int)currentWindowID].Open();
         }
     }
 }

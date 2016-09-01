@@ -5,27 +5,27 @@ using UnityEngine.EventSystems;
 public enum WindowIDs {
     StartWindow = 0,
     PauseWindow = 1,
-    GameOver = 2
+    Credits = 2,
+    Options = 3,
+    Won = 4,
+    None = -1,
 }
 
 public class GenericWindow : MonoBehaviour {
 
-    protected EventSystem _eventSystem {
-        get { return GameObject.Find("EventSystem").GetComponent<EventSystem>(); }
-    }
-
     protected GameManager _gameManager;
     protected WindowManager _windowManager;
+    protected EventSystem _eventSystem;
 
     [SerializeField]
     private GameObject _firstSelected;
-    public GameObject FirstSelected {
-        get { return _firstSelected; }
+
+    public virtual void Select() {
+        _eventSystem.SetSelectedGameObject(_firstSelected);
     }
 
-
-    public virtual void OnFocus() {
-        _eventSystem.SetSelectedGameObject(_firstSelected);
+    public virtual void Deselect() {
+        _eventSystem.SetSelectedGameObject(null);
     }
 
     protected virtual void Display(bool value) {
@@ -34,16 +34,18 @@ public class GenericWindow : MonoBehaviour {
 
     public virtual void Open() {
         Display(true);
-        OnFocus();
+        Select();
     }
 
     public virtual void Close() {
         Display(false);
+        Deselect();
     }
 
     protected virtual void Awake() {
         _gameManager = GameManager.Instance;
         _windowManager = WindowManager.Instance;
+        _eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
     }
 }
 

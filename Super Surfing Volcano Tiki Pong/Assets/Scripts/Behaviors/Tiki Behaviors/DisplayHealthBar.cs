@@ -8,19 +8,19 @@ public class DisplayHealthBar : MonoBehaviour {
 
     private void OnEnable() {
         TikiAnimationManager.ToggleUI += OnStart;
-        PauseMenu.OnReturnToMain += OnMainMenu;
+        PauseMenu.OnReturnToMainMenu += OnMainMenu;
     }
 
     private void OnDisable() {
         TikiAnimationManager.ToggleUI -= OnStart;
-        PauseMenu.OnReturnToMain += OnMainMenu;
+        PauseMenu.OnReturnToMainMenu += OnMainMenu;
     }
 
     private void OnStart() {
         _healthBar.SetActive(true);
     }
 
-    private void OnMainMenu() {
+    private void OnMainMenu(WindowIDs close, WindowIDs open) {
         _healthBar.SetActive(false);
     }
 }

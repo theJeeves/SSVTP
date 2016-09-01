@@ -39,19 +39,19 @@ public class FBAnimationManager : MonoBehaviour {
 
     void OnEnable() {
         FBCollisionEvent.onDamagePlayerCollision += OnPlayerDamage;
-        PauseMenu.OnReturnToMain += DestroyFireball;
+        PauseMenu.OnReturnToMainMenu += DestroyFireball;
     }
 
     void OnDisable() {
         FBCollisionEvent.onDamagePlayerCollision -= OnPlayerDamage;
-        PauseMenu.OnReturnToMain -= DestroyFireball;
+        PauseMenu.OnReturnToMainMenu -= DestroyFireball;
     }
 
     private void OnPlayerDamage(GameObject leftWall) {
         _hitLeftWall = true;
     }
 
-    private void DestroyFireball() { 
+    private void DestroyFireball(WindowIDs close, WindowIDs open) { 
         Destroy(gameObject);
     }
 

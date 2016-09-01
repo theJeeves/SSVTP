@@ -16,7 +16,7 @@ public class GameManager : Singleton<GameManager> {
 
     private int _maxVolcanoHealth = 3;
     private float _attackDelay = 1.0f;
-    private float _gameResetDelay = 5.0f;
+    //private float _gameResetDelay = 5.0f;
 
     [SerializeField]
     private int _tikiHP;
@@ -76,7 +76,8 @@ public class GameManager : Singleton<GameManager> {
     // Use this for initialization
     public override void Awake () {
         base.Awake();
-        ResetGame();
+        _gameState = GameStates.InMenu;
+        ResetGame(WindowIDs.None, WindowIDs.None);
     }
 
     void Update() {
@@ -92,18 +93,18 @@ public class GameManager : Singleton<GameManager> {
         FBCollisionEvent.onDamagePlayerCollision += DecrementVolcanoHealth;
         FBCollisionEvent.onSGCollision += BounceFB;
         FBCollisionEvent.onTikiCollision += DecrementTikiHealth;
+        StartMenu.OnStartGame += ResetGame;
     }
 
     void OnDisable() {
         FBCollisionEvent.onDamagePlayerCollision -= DecrementVolcanoHealth;
         FBCollisionEvent.onSGCollision -= BounceFB;
         FBCollisionEvent.onTikiCollision -= DecrementTikiHealth;
+        StartMenu.OnStartGame -= ResetGame;
     }
 
-    public void ResetGame() {
-        _gameState = GameStates.InMenu;
+    public void ResetGame(WindowIDs close, WindowIDs open) {
         _resetAttack = false;
-        _gameState = 0;
         _hitSurferGirl = false;
         _hitLeftWall = false;
         _volcanoHealth = _maxVolcanoHealth;

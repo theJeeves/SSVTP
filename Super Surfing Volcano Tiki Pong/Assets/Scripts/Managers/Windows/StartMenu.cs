@@ -3,27 +3,16 @@ using System.Collections;
 
 public class StartMenu : GenericWindow {
 
-    public delegate void StartGame();
-    public static event StartGame OnStartGame;
+    public delegate void StartMenuEvent(WindowIDs close, WindowIDs open);
 
-    // Use this for initialization
-    void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public static event StartMenuEvent OnStartGame;
+    public static event StartMenuEvent OnCredits;
 
-    public override void Open() {
-        base.Open();
-        _gameManager.GameState = GameStates.InMenu;
+    public void StartGame() {
+        OnStartGame(WindowIDs.StartWindow, WindowIDs.None);
     }
 
-    public override void Close() {
-        base.Close();
-        OnStartGame();
-        _gameManager.ResetAttack = true;
+    public void DisplayCredits() {
+        OnCredits(WindowIDs.StartWindow, WindowIDs.Credits);
     }
 }

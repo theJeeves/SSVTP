@@ -18,7 +18,6 @@ public class TikiAnimationManager : MonoBehaviour {
 
     private GameManager _gameManager;
     private Animator _animator;
-    private bool _gameStarted = false;
 
 	// Use this for initialization
 	void Start () {
@@ -46,7 +45,8 @@ public class TikiAnimationManager : MonoBehaviour {
         else if (_gameManager.GameState == GameStates.Won) {
             ChangeAnimationState(TikiAnimations.Damaged);
         }
-        else {
+        else if (_gameManager.GameState == GameStates.GameOver ||
+            _gameManager.GameState == GameStates.InMenu) {
             ChangeAnimationState(TikiAnimations.Resting);
         }
 	}

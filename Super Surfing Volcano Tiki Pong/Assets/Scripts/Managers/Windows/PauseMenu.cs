@@ -3,24 +3,15 @@ using System.Collections;
 
 public class PauseMenu : GenericWindow {
 
-    public delegate void ReturnToMain();
+    public delegate void PauseMenuEvent(WindowIDs close, WindowIDs open);
+    public static event PauseMenuEvent OnResume;
+    public static event PauseMenuEvent OnReturnToMainMenu;
 
-    public static event ReturnToMain OnReturnToMain; 
-
-    public override void Open() {
-        base.Open();
-        _gameManager.GameState = GameStates.Paused;
+    public void Resume() {
+        OnResume(WindowIDs.PauseWindow, WindowIDs.None);
     }
 
-    public override void Close() {
-        _gameManager.GameState = GameStates.Playing;
-        base.Close();
-    }
-
-    public void BackToMain() {
-        base.Close();
-        OnReturnToMain();
-        _gameManager.GameState = GameStates.InMenu;
-        _windowManager.Open(WindowIDs.StartWindow);
+    public void ReturnToMainMenu() {
+        OnReturnToMainMenu(WindowIDs.PauseWindow, WindowIDs.StartWindow);
     }
 }
