@@ -12,6 +12,6 @@ public class PauseMenu : GenericWindow {
     }
 
     public void ReturnToMainMenu() {
-        OnReturnToMainMenu(WindowIDs.PauseWindow, WindowIDs.StartWindow);
+        OnReturnToMainMenu(WindowIDs.PauseWindow, WindowIDs.MainMenuWindow);
     }
 }

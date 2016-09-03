@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.EventSystems;
 
 public enum WindowIDs {
-    StartWindow = 0,
+    MainMenuWindow = 0,
     PauseWindow = 1,
     Credits = 2,
     Options = 3,

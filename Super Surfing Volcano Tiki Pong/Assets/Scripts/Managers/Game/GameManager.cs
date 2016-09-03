@@ -12,7 +12,8 @@ public enum GameStates {
 public class GameManager : Singleton<GameManager> {
 
     public delegate void GameManagerEvent();
-    public static event GameManagerEvent GameOver;
+    public static event GameManagerEvent OnGameOver;
+    public static event GameManagerEvent OnGameWon;
 
     private int _maxVolcanoHealth = 3;
     private float _attackDelay = 1.0f;
@@ -71,6 +72,12 @@ public class GameManager : Singleton<GameManager> {
         get { return _volcanoHealth; }
     }
 
+    private bool _gameOver;
+    public bool GameOver {
+        get { return _gameOver; }
+        set { _gameOver = value; }
+    }
+
     private float _defaultTimeScale;
 
     // Use this for initialization
@@ -105,24 +112,17 @@ public class GameManager : Singleton<GameManager> {
 
     public void ResetGame(WindowIDs close, WindowIDs open) {
         _resetAttack = false;
+        _hitTiki = false;
         _hitSurferGirl = false;
         _hitLeftWall = false;
-        _volcanoHealth = _maxVolcanoHealth;
+        //_volcanoHealth = _maxVolcanoHealth;
+        _volcanoHealth = 0;
         _tikiDamageTaken = false;
-        _maxTikiHealth = 165;
+        //_maxTikiHealth = 165;
+        _maxTikiHealth = 1;
         _tikiHP = _maxTikiHealth;
         _defaultTimeScale = 1.0f;
-    }
-
-    private void DecrementVolcanoHealth(GameObject leftWall) {
-        _hitLeftWall = true;
-        if (--_volcanoHealth < 0) {
-            _gameState = GameStates.GameOver;
-            GameOver();
-        }
-        else {
-            StartCoroutine(ResetDelay(_attackDelay));
-        }
+        _gameOver = false;
     }
 
     private void BounceFB(GameObject surferGirl) {
@@ -130,11 +130,23 @@ public class GameManager : Singleton<GameManager> {
         surferGirl.GetComponent<CollisionState>().BlockedFB = true;
     }
 
+    private void DecrementVolcanoHealth(GameObject leftWall) {
+        _hitLeftWall = true;
+        if (--_volcanoHealth < 0) {
+            _gameState = GameStates.GameOver;
+            OnGameOver();
+        }
+        else {
+            StartCoroutine(ResetDelay(_attackDelay));
+        }
+    }
+
     private void DecrementTikiHealth(GameObject tiki) {
         _hitTiki = true;
         _tikiHP -= 11;
         if (_tikiHP <= 0) {
             _gameState = GameStates.Won;
+            OnGameWon();
         }
     }
 

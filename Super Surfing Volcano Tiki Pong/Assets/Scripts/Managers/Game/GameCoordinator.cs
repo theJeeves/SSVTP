@@ -28,14 +28,16 @@ public class GameCoordinator : MonoBehaviour {
         StartMenu.OnStartGame += OnStartGame;
         PauseMenu.OnResume += OnResume;
         PauseMenu.OnReturnToMainMenu += OnReturnToMainMenu;
-        GameManager.GameOver += OnGameOver;
+        GameManager.OnGameOver += OnGameOver;
+        GameManager.OnGameWon += OnGameWon;
     }
 
     private void OnDisable() {
         StartMenu.OnStartGame -= OnStartGame;
         PauseMenu.OnResume -= OnResume;
         PauseMenu.OnReturnToMainMenu -= OnReturnToMainMenu;
-        GameManager.GameOver -= OnGameOver;
+        GameManager.OnGameOver -= OnGameOver;
+        GameManager.OnGameWon -= OnGameWon;
     }
 
     private void OnStartGame(WindowIDs close, WindowIDs open) {
@@ -64,7 +66,7 @@ public class GameCoordinator : MonoBehaviour {
     private void OnReturnToMainMenu(WindowIDs close, WindowIDs open) {
         _surferGirl.transform.position = new Vector3(0, -36.34501f, _surferGirl.transform.position.z);
         _tiki.transform.position = new Vector3(180, 11, 0);
-        _UI.SetActive(false);
+        DisableUI();
         _gameManager.GameState = GameStates.InMenu;
     }
 
@@ -72,7 +74,7 @@ public class GameCoordinator : MonoBehaviour {
         _surferGirl.GetComponent<CircleCollider2D>().enabled = false;
         StartCoroutine(GameOverSurferGirl());
         StartCoroutine(GameOverTiki());
-        _UI.SetActive(false);
+        DisableUI();
     }
 
     private IEnumerator GameOverSurferGirl() {
@@ -89,11 +91,44 @@ public class GameCoordinator : MonoBehaviour {
             yield return 0;
         }
 
-        float baselineTime = Time.time;
-        while (Time.time - baselineTime < _displayDelay) {
-            yield return 0;
-        }
+        yield return new WaitForSeconds(_displayDelay);
+
         _gameManager.ResetGame(WindowIDs.None, WindowIDs.None);
         OnReturnToMainMenu(WindowIDs.None, WindowIDs.None);
+        _gameManager.GameOver = true;
+    }
+
+    private void OnGameWon() {
+        StartCoroutine(GameWonSurferGirl());
+        StartCoroutine(GameWonTiki());
+        DisableUI();
+    }
+
+    private IEnumerator GameWonSurferGirl() {
+        while (_surferGirl.transform.position.x <= 0.0f) {
+            _surferGirl.transform.Translate(Vector2.right * (_normalTransisitonSpeed * 0.75f) * Time.deltaTime);
+            yield return 0;
+        }
+        while (Camera.main.WorldToViewportPoint(_tiki.transform.position).x < 1.1f) {
+            yield return 0;
+        }
+
+        yield return new WaitForSeconds(_displayDelay - 1.0f);
+        _gameManager.GameOver = true;
+        yield return new WaitForSeconds(_displayDelay);
+
+        _gameManager.ResetGame(WindowIDs.None, WindowIDs.None);
+        OnReturnToMainMenu(WindowIDs.None, WindowIDs.None);
+    }
+
+    private IEnumerator GameWonTiki() {
+        while (Camera.main.WorldToViewportPoint(_tiki.transform.position).x < 1.1f) {
+            _tiki.transform.Translate(Vector2.right * _normalTransisitonSpeed * Time.deltaTime);
+            yield return 0;
+        }
+    }
+
+    private void DisableUI() {
+        _UI.SetActive(false);
     }
 }

@@ -5,26 +5,33 @@ public class PlayerAnimationManager : MonoBehaviour {
 
     public float blockAnimationDuration;
 
+    private GameManager _gameManager;
     private Animator _animator;
     private CollisionState _collisionState;
 
-    void Awake() {
+    void Start() {
+        _gameManager = GameManager.Instance;
         _animator = GetComponent<Animator>();
         _collisionState = GetComponent<CollisionState>();
     }
 
     // Update is called once per frame
     void Update() {
-
-        if (_collisionState.surfing) {
+        if (_gameManager.GameState == GameStates.Playing) {
+            if (_collisionState.surfing) {
+                ChangeAnimationState(0);
+            }
+            if (!_collisionState.surfing) {
+                ChangeAnimationState(1);
+            }
+            if (_collisionState.BlockedFB) {
+                ChangeAnimationState(1);
+                StartCoroutine(BlockAnimationDelay());
+            }
+        }
+        else if (_gameManager.GameState == GameStates.InMenu ||
+            _gameManager.GameState == GameStates.Won) {
             ChangeAnimationState(0);
-        }
-        if (!_collisionState.surfing) {
-            ChangeAnimationState(1);
-        }
-        if (_collisionState.BlockedFB) {
-            ChangeAnimationState(1);
-            StartCoroutine(BlockAnimationDelay());
         }
     }
 

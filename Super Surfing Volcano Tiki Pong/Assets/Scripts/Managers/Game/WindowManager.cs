@@ -18,6 +18,8 @@ public class WindowManager : Singleton<WindowManager> {
         StartMenu.OnCredits += ToggleWindows;
         PauseMenu.OnReturnToMainMenu += ToggleWindows;
         PauseMenu.OnResume += ToggleWindows;
+        GameManager.OnGameOver += OnGameOver;
+        GameManager.OnGameWon += OnGameOver;
     }
 
     private void OnDisable() {
@@ -25,11 +27,13 @@ public class WindowManager : Singleton<WindowManager> {
         StartMenu.OnCredits -= ToggleWindows;
         PauseMenu.OnReturnToMainMenu -= ToggleWindows;
         PauseMenu.OnResume -= ToggleWindows;
+        GameManager.OnGameOver -= OnGameOver;
+        GameManager.OnGameWon -= OnGameOver;
     }
 
     public override void Awake() {
         _gameManager = GameManager.Instance;
-        ToggleWindows(WindowIDs.None, WindowIDs.StartWindow);
+        ToggleWindows(WindowIDs.None, WindowIDs.MainMenuWindow);
     }
 
     void Update() {
@@ -48,19 +52,12 @@ public class WindowManager : Singleton<WindowManager> {
                 }
             }
         }
-        if (_gameManager.GameState == GameStates.InMenu) {
-
-            if (Input.anyKeyDown) {
-                if (currentWindowID == WindowIDs.Credits || currentWindowID == WindowIDs.Options) {
-                    ToggleWindows(currentWindowID, WindowIDs.StartWindow);
-                }
+        if (_gameManager.GameState == GameStates.InMenu && currentWindowID == WindowIDs.Credits) {
+            if (Input.anyKeyDown && !Input.GetKeyDown(KeyCode.KeypadEnter) && !Input.GetKeyDown(KeyCode.Return)) {
+                ToggleWindows(WindowIDs.Credits, WindowIDs.MainMenuWindow);
             }
         }
     }
-
-    //public GenericWindow GetWindow(WindowIDs windowID) {
-    //    return windows[(int)windowID];
-    //}
 
     private void ToggleWindows(WindowIDs close, WindowIDs open) {
         if (close != WindowIDs.None) {
@@ -70,6 +67,28 @@ public class WindowManager : Singleton<WindowManager> {
 
         if (currentWindowID != WindowIDs.None) {
             windows[(int)currentWindowID].Open();
+        }
+    }
+
+    private void OnGameOver() {
+        StartCoroutine(BackToMainMenu());
+    }
+
+    private IEnumerator BackToMainMenu() {
+        while (!_gameManager.GameOver) {
+            yield return 0;
+        }
+
+        if (_gameManager.GameState == GameStates.Won) {
+
+            ToggleWindows(WindowIDs.None, WindowIDs.Credits);
+            while (_gameManager.GameOver) {
+                yield return 0;
+            }
+            ToggleWindows(WindowIDs.Credits, WindowIDs.MainMenuWindow);
+        }
+        else {
+            ToggleWindows(WindowIDs.None, WindowIDs.MainMenuWindow);
         }
     }
 }

@@ -9,10 +9,10 @@ public class StartMenu : GenericWindow {
     public static event StartMenuEvent OnCredits;
 
     public void StartGame() {
-        OnStartGame(WindowIDs.StartWindow, WindowIDs.None);
+        OnStartGame(WindowIDs.MainMenuWindow, WindowIDs.None);
     }
 
     public void DisplayCredits() {
-        OnCredits(WindowIDs.StartWindow, WindowIDs.Credits);
+        OnCredits(WindowIDs.MainMenuWindow, WindowIDs.Credits);
     }
 }
