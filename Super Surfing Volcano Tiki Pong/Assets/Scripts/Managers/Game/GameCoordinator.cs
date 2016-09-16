@@ -30,6 +30,7 @@ public class GameCoordinator : MonoBehaviour {
         PauseMenu.OnReturnToMainMenu += OnReturnToMainMenu;
         GameManager.OnGameOver += OnGameOver;
         GameManager.OnGameWon += OnGameWon;
+        OptionsMenu.OnDisplayUI += ToggleUI;
     }
 
     private void OnDisable() {
@@ -38,6 +39,7 @@ public class GameCoordinator : MonoBehaviour {
         PauseMenu.OnReturnToMainMenu -= OnReturnToMainMenu;
         GameManager.OnGameOver -= OnGameOver;
         GameManager.OnGameWon -= OnGameWon;
+        OptionsMenu.OnDisplayUI -= ToggleUI;
     }
 
     private void OnStartGame(WindowIDs close, WindowIDs open) {
@@ -54,7 +56,7 @@ public class GameCoordinator : MonoBehaviour {
             yield return 0;
         }
 
-        _UI.SetActive(true);
+        SetUIActive(true);
         _gameManager.ResetAttack = true;
         _gameManager.GameState = GameStates.Playing;
     }
@@ -66,7 +68,7 @@ public class GameCoordinator : MonoBehaviour {
     private void OnReturnToMainMenu(WindowIDs close, WindowIDs open) {
         _surferGirl.transform.position = new Vector3(0, -36.34501f, _surferGirl.transform.position.z);
         _tiki.transform.position = new Vector3(180, 11, 0);
-        DisableUI();
+        SetUIActive(false);
         _gameManager.GameState = GameStates.InMenu;
     }
 
@@ -74,7 +76,7 @@ public class GameCoordinator : MonoBehaviour {
         _surferGirl.GetComponent<CircleCollider2D>().enabled = false;
         StartCoroutine(GameOverSurferGirl());
         StartCoroutine(GameOverTiki());
-        DisableUI();
+        SetUIActive(false);
     }
 
     private IEnumerator GameOverSurferGirl() {
@@ -101,7 +103,7 @@ public class GameCoordinator : MonoBehaviour {
     private void OnGameWon() {
         StartCoroutine(GameWonSurferGirl());
         StartCoroutine(GameWonTiki());
-        DisableUI();
+        SetUIActive(false);
     }
 
     private IEnumerator GameWonSurferGirl() {
@@ -128,7 +130,18 @@ public class GameCoordinator : MonoBehaviour {
         }
     }
 
-    private void DisableUI() {
-        _UI.SetActive(false);
+    private void SetUIActive(bool value) {
+        if (_gameManager.Profile.DisplayUI == true) {
+            _UI.SetActive(value);
+        }
+    }
+
+    private void ToggleUI() {
+        if (_gameManager.Profile.DisplayUI) {
+            _UI.SetActive(true);
+        }
+        else if (!_gameManager.Profile.DisplayUI) {
+            _UI.SetActive(false);
+        }
     }
 }

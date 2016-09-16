@@ -25,6 +25,7 @@ public class Singleton<Type> : MonoBehaviour where Type : MonoBehaviour {
             DontDestroyOnLoad(gameObject);
         }
         else {
+            Debug.Log("destroyed");
             Destroy(gameObject);
         }
     }

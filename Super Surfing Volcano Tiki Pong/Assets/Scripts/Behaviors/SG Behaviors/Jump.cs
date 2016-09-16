@@ -42,6 +42,13 @@ public class Jump : AbstractBehavior {
                 _hitSky = false;
             }
         }
+        else if (_gameManager.GameState == GameStates.GameOver) {
+            body2d.velocity = new Vector2(0, 0);
+        }
+        else if (_gameManager.GameState == GameStates.Won) {
+            DriftDown();
+        }
+
 	}
 
     private void OnJump() {

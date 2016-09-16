@@ -15,9 +15,29 @@ public class GameManager : Singleton<GameManager> {
     public static event GameManagerEvent OnGameOver;
     public static event GameManagerEvent OnGameWon;
 
-    private int _maxVolcanoHealth = 3;
+    public class PlayerProfile {
+
+        private bool _displayUI = false;
+        public bool DisplayUI {
+            get { return _displayUI; }
+            set {
+                PlayerPrefs.SetInt("DisplayUI", value == true ? 1 : 0);
+                _displayUI = PlayerPrefs.GetInt("DisplayUI") == 1 ? true : false;
+            }
+        }
+    }
+
+    private PlayerProfile _profile;
+    public PlayerProfile Profile {
+        get { return _profile; }
+    }
+
     private float _attackDelay = 1.0f;
-    //private float _gameResetDelay = 5.0f;
+
+    private int _maxTikiHealth = 165;
+    public int MaxTikiHealth {
+        get { return _maxTikiHealth; }
+    }
 
     [SerializeField]
     private int _tikiHP;
@@ -26,9 +46,12 @@ public class GameManager : Singleton<GameManager> {
         set { _tikiHP = value; }
     }
 
-    private int _maxTikiHealth;
-    public int MaxTikiHealth {
-        get { return _maxTikiHealth; }
+    private int _maxVolcanoHealth = 3;
+
+    [SerializeField]
+    private int _volcanoHealth;
+    public int VolcanoHealth {
+        get { return _volcanoHealth; }
     }
 
     private bool _tikiDamageTaken;
@@ -67,11 +90,6 @@ public class GameManager : Singleton<GameManager> {
         get { return _hitLeftWall; }
     }
 
-    private int _volcanoHealth;
-    public int VolcanoHealth {
-        get { return _volcanoHealth; }
-    }
-
     private bool _gameOver;
     public bool GameOver {
         get { return _gameOver; }
@@ -85,6 +103,11 @@ public class GameManager : Singleton<GameManager> {
         base.Awake();
         _gameState = GameStates.InMenu;
         ResetGame(WindowIDs.None, WindowIDs.None);
+    }
+
+    void Start() {
+        _profile = new PlayerProfile();
+        _profile.DisplayUI = PlayerPrefs.GetInt("DisplayUI") == 1 ? true : false;
     }
 
     void Update() {
@@ -115,11 +138,8 @@ public class GameManager : Singleton<GameManager> {
         _hitTiki = false;
         _hitSurferGirl = false;
         _hitLeftWall = false;
-        //_volcanoHealth = _maxVolcanoHealth;
-        _volcanoHealth = 0;
+        _volcanoHealth = _maxVolcanoHealth;
         _tikiDamageTaken = false;
-        //_maxTikiHealth = 165;
-        _maxTikiHealth = 1;
         _tikiHP = _maxTikiHealth;
         _defaultTimeScale = 1.0f;
         _gameOver = false;

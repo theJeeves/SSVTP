@@ -7,6 +7,7 @@ public class StartMenu : GenericWindow {
 
     public static event StartMenuEvent OnStartGame;
     public static event StartMenuEvent OnCredits;
+    public static event StartMenuEvent OnOptionsMenu;
 
     public void StartGame() {
         OnStartGame(WindowIDs.MainMenuWindow, WindowIDs.None);
@@ -14,5 +15,9 @@ public class StartMenu : GenericWindow {
 
     public void DisplayCredits() {
         OnCredits(WindowIDs.MainMenuWindow, WindowIDs.Credits);
+    }
+
+    public void OpenOptionsMenu() {
+        OnOptionsMenu(WindowIDs.MainMenuWindow, WindowIDs.Options);
     }
 }
