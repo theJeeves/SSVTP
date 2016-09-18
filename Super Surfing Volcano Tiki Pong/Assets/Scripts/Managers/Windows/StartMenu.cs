@@ -20,4 +20,8 @@ public class StartMenu : GenericWindow {
     public void OpenOptionsMenu() {
         OnOptionsMenu(WindowIDs.MainMenuWindow, WindowIDs.Options);
     }
+
+    public void OnExit() {
+        Application.Quit();
+    }
 }

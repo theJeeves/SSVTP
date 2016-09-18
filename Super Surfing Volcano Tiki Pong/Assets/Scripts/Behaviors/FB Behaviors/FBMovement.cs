@@ -61,12 +61,13 @@ public class FBMovement : MonoBehaviour {
     }
 
     public void BounceFromSG() {
-
-        CalculateTan();
-        horiztonalDirection *= -1.0f;
-        ChangeFacingDirection();
-        ChangeRotation();
-        _gameManager.HitSurferGirl = false;
+        if (horiztonalDirection <= 0) {
+            CalculateTan();
+            horiztonalDirection *= -1.0f;
+            ChangeFacingDirection();
+            ChangeRotation();
+            _gameManager.HitSurferGirl = false;
+        }
     }
 
     private void FBHitTiki() {
