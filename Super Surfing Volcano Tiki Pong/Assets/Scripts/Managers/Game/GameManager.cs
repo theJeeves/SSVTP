@@ -40,10 +40,10 @@ public class GameManager : Singleton<GameManager> {
     }
 
     [SerializeField]
-    private int _tikiHP;
-    public int TikiHP {
-        get { return _tikiHP; }
-        set { _tikiHP = value; }
+    private int _tikiHealth;
+    public int TikiHealth {
+        get { return _tikiHealth; }
+        set { _tikiHealth = value; }
     }
 
     private int _maxVolcanoHealth = 3;
@@ -140,7 +140,7 @@ public class GameManager : Singleton<GameManager> {
         _hitLeftWall = false;
         _volcanoHealth = _maxVolcanoHealth;
         _tikiDamageTaken = false;
-        _tikiHP = _maxTikiHealth;
+        _tikiHealth = _maxTikiHealth;
         _defaultTimeScale = 1.0f;
         _gameOver = false;
     }
@@ -163,8 +163,8 @@ public class GameManager : Singleton<GameManager> {
 
     private void DecrementTikiHealth(GameObject tiki) {
         _hitTiki = true;
-        _tikiHP -= 11;
-        if (_tikiHP <= 0) {
+        _tikiHealth -= 11;
+        if (_tikiHealth <= 0) {
             _gameState = GameStates.Won;
             OnGameWon();
         }

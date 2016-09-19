@@ -16,6 +16,8 @@ public class OptionsMenu : GenericWindow {
 
     public void OnValueChanged() {
         _gameManager.Profile.DisplayUI = UIToggle.isOn;
-        OnDisplayUI();
+        if (_gameManager.GameState == GameStates.Paused) {
+            OnDisplayUI();
+        }
     }
 }

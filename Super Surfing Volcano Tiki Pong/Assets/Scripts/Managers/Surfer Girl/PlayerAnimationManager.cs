@@ -33,6 +33,9 @@ public class PlayerAnimationManager : MonoBehaviour {
             _gameManager.GameState == GameStates.Won) {
             ChangeAnimationState(0);
         }
+        else if (_gameManager.GameState == GameStates.GameOver) {
+            ChangeAnimationState(1);
+        }
     }
 
     void ChangeAnimationState(int animationNum) {

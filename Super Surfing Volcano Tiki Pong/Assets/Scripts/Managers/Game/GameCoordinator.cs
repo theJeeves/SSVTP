@@ -131,7 +131,7 @@ public class GameCoordinator : MonoBehaviour {
     }
 
     private void SetUIActive(bool value) {
-        if (_gameManager.Profile.DisplayUI == true) {
+        if (_gameManager.Profile.DisplayUI) {
             _UI.SetActive(value);
         }
     }

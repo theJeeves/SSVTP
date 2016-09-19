@@ -22,8 +22,22 @@ public class FBMovement : MonoBehaviour {
         _body2D = GetComponent<Rigidbody2D>();
     }
 
-	// Use this for initialization
-	void Start () {
+    void OnEnable() {
+        FBCollisionEvent.onSGCollision += BounceFromSG;
+        FBCollisionEvent.onTikiCollision += FBHitTiki;
+        FBCollisionEvent.onDamagePlayerCollision += FBHitLeftWall;
+        FBCollisionEvent.onEnvironmentCollision += FBHitEnvironment;
+    }
+
+    void OnDisable() {
+        FBCollisionEvent.onSGCollision -= BounceFromSG;
+        FBCollisionEvent.onTikiCollision -= FBHitTiki;
+        FBCollisionEvent.onDamagePlayerCollision -= FBHitLeftWall;
+        FBCollisionEvent.onEnvironmentCollision -= FBHitEnvironment;
+    }
+
+    // Use this for initialization
+    void Start () {
         _fbSpeed = defaultSpeed;
         verticalDirection = Random.Range(-1.0f, 1.0f);
         CalculateTan();
@@ -42,57 +56,55 @@ public class FBMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (_gameManager.GameState == GameStates.Playing) {
-            if (_gameManager.HitLeftWall) {
-                _fbSpeed = 0.0f;
-            }
-            else if (_gameManager.HitSurferGirl) {
-                BounceFromSG();
-            }
-            else if (_gameManager.HitTiki) {
-                FBHitTiki();
-            }
-            _body2D.velocity = new Vector2(_fbSpeed * horiztonalDirection, _fbSpeed * verticalDirection);
-        }
-        else if (_gameManager.GameState == GameStates.Won ||
+        if (_gameManager.GameState == GameStates.Won ||
             _gameManager.GameState == GameStates.GameOver) {
             _body2D.velocity = Vector2.zero;
         }
+        else {
+            NewVelocity();
+        }
     }
 
-    public void BounceFromSG() {
-        if (horiztonalDirection <= 0) {
+    private void NewVelocity() {
+        _body2D.velocity = new Vector2(_fbSpeed * horiztonalDirection, _fbSpeed * verticalDirection);
+    }
+
+    public void BounceFromSG(GameObject ignore) {
+        if (_gameManager.GameState == GameStates.Playing) {
+            if (horiztonalDirection <= 0) {
+                CalculateTan();
+                horiztonalDirection *= -1.0f;
+                ChangeFacingDirection();
+                ChangeRotation();
+                _gameManager.HitSurferGirl = false;
+                NewVelocity();
+            }
+        }
+    }
+
+    private void FBHitTiki(GameObject ignore) {
+
+        if (_gameManager.GameState == GameStates.Playing) {
+            verticalDirection = Random.Range(-1.0f, 1.0f);
             CalculateTan();
             horiztonalDirection *= -1.0f;
             ChangeFacingDirection();
             ChangeRotation();
-            _gameManager.HitSurferGirl = false;
+            _gameManager.HitTiki = false;
+            NewVelocity();
         }
     }
 
-    private void FBHitTiki() {
-
-        verticalDirection = Random.Range(-1.0f, 1.0f);
-        CalculateTan();
-        horiztonalDirection *= -1.0f;
-        ChangeFacingDirection();
-        ChangeRotation();
-        _gameManager.HitTiki = false;
-    }
-
-    void OnEnable() {
-        FBCollisionEvent.onEnvironmentCollision += FBHitEnvironment;
-    }
-
-    void OnDisable() {
-        FBCollisionEvent.onEnvironmentCollision -= FBHitEnvironment;
-    }
-
-    private void FBHitEnvironment(GameObject sky) {
+    private void FBHitEnvironment(GameObject ignore) {
 
         CalculateTan();
         verticalDirection *= -1.0f;
         ChangeRotation();
+    }
+
+    private void FBHitLeftWall(GameObject ignore) {
+        _fbSpeed = 0.0f;
+        NewVelocity();
     }
 
     private void CalculateTan() {
@@ -106,8 +118,7 @@ public class FBMovement : MonoBehaviour {
     }
 
     private void ChangeFacingDirection() {
-        transform.localScale = new Vector3(-transform.localScale.x,
-            transform.localScale.y, 1);
+        transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, 1);
     }
 
     private void ChangeRotation() {

@@ -82,6 +82,10 @@ public class WindowManager : Singleton<WindowManager> {
         if (currentWindowID != WindowIDs.None) {
             windows[(int)currentWindowID].Open();
         }
+
+        if (close == WindowIDs.PauseWindow && open == WindowIDs.None) {
+            _gameManager.GameState = GameStates.Playing;
+        }
     }
 
     private void TogglePauseButtons(WindowIDs ignore1, WindowIDs ignore2) {

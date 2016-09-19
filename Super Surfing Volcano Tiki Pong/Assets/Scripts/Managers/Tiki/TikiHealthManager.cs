@@ -14,50 +14,46 @@ public class TikiHealthManager : MonoBehaviour {
 
     void Awake() {
         _gameManager = GameManager.Instance;
-    }
-
-	// Use this for initialization
-	void Start () {
         tikiHealth.minValue = 0;
-        tikiHealth.maxValue = _gameManager.TikiHP;
+        tikiHealth.maxValue = _gameManager.MaxTikiHealth;
         tikiHealth.wholeNumbers = true;
-        tikiHealth.value = tikiHealth.maxValue;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        if (_gameManager.GameState == GameStates.Playing) {
-
-            if (_gameManager.HitTiki) {
-                if (_gameManager.TikiHP % 33 == 0) { 
-                    DecrementHealthValue();
-                    DecrementHealthColor();
-                }
-            }
-        }
-        if (_gameManager.GameState == GameStates.Won) {
-            DecrementHealthValue();
-            DecrementHealthColor();
-        }
-	}
-
-    private void OnEnable() {
-        _gameManager.TikiHP = _gameManager.MaxTikiHealth;
-        tikiHealth.value = tikiHealth.maxValue;
-        healthColor = new Color(0.0f, 1.0f, 0.0f, 1.0f);
-        FillRectColor();
     }
 
-    private void DecrementHealthValue() {
-        tikiHealth.value -= 33;
+    void OnEnable() {
+        tikiHealth.value = _gameManager.TikiHealth;
+        UpdateColor();
+        FBCollisionEvent.onTikiCollision += UpdateHealth;
     }
 
-    private void DecrementHealthColor() {
-        if (healthColor.r != 1.0) {
-            healthColor.r += .5f;
+    void OnDisable() {
+        FBCollisionEvent.onTikiCollision -= UpdateHealth;
+    }
+
+    private void UpdateHealth(GameObject tiki) {
+        DecrementValue();
+        UpdateColor();
+    }
+
+    private void DecrementValue() {
+        tikiHealth.value -= 11;
+    }
+
+    private void UpdateColor() {
+
+        if ((int)tikiHealth.value > 132) {
+            healthColor = new Color(0.0f, 1.0f, 0.0f, 1.0f);
         }
-        else {
-            healthColor.g -= .5f;
+        else if ((int)tikiHealth.value > 99) {
+            healthColor = new Color(0.5f, 1.0f, 0.0f, 1.0f); 
+        }
+        else if ((int)tikiHealth.value > 66) {
+            healthColor = new Color(1.0f, 1.0f, 0.0f, 1.0f);
+        }
+        else if ((int)tikiHealth.value > 33) {
+            healthColor = new Color(1.0f, 0.5f, 0.0f, 1.0f);
+        }
+        else if ((int)tikiHealth.value > 0) {
+            healthColor = new Color(1.0f, 0.0f, 0.0f, 1.0f);
         }
 
         FillRectColor();

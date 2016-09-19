@@ -19,6 +19,14 @@ public class TikiAnimationManager : MonoBehaviour {
     private GameManager _gameManager;
     private Animator _animator;
 
+    void OnEnable() {
+        FBCollisionEvent.onTikiCollision += FBHitTiki;
+    }
+
+    void OnDisable() {
+        FBCollisionEvent.onTikiCollision -= FBHitTiki;
+    }
+
 	// Use this for initialization
 	void Start () {
         _gameManager = GameManager.Instance;
@@ -31,9 +39,9 @@ public class TikiAnimationManager : MonoBehaviour {
         if (_gameManager.GameState == GameStates.Playing ||
             _gameManager.GameState == GameStates.GameOver) {
 
-            if (_gameManager.HitTiki) {
-                _gameManager.TikiDamageTaken = _gameManager.TikiHP % 33 == 0 ? true : false;
-            }
+            //if (_gameManager.HitTiki) {
+            //    _gameManager.TikiDamageTaken = _gameManager.TikiHealth % 33 == 0 ? true : false;
+            //}
             if (!_gameManager.TikiDamageTaken) {
                 ChangeAnimationState(TikiAnimations.Attacking);
             }
@@ -50,6 +58,10 @@ public class TikiAnimationManager : MonoBehaviour {
             ChangeAnimationState(TikiAnimations.Resting);
         }
 	}
+
+    private void FBHitTiki(GameObject ignore) {
+        _gameManager.TikiDamageTaken = _gameManager.TikiHealth % 33 == 0 ? true : false;
+    }
 
     public void ChangeAnimationState(TikiAnimations animationState) {
         _animator.SetInteger("AnimationState", (int)animationState);
