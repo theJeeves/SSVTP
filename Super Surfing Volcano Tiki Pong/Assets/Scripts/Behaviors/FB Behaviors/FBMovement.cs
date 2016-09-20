@@ -37,7 +37,7 @@ public class FBMovement : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start () {
+    void Start() {
         _fbSpeed = defaultSpeed;
         verticalDirection = Random.Range(-1.0f, 1.0f);
         CalculateTan();
@@ -53,9 +53,9 @@ public class FBMovement : MonoBehaviour {
 
         transform.localRotation = Quaternion.Euler(0, 0, _angle);
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void FixedUpdate () {
         if (_gameManager.GameState == GameStates.Won ||
             _gameManager.GameState == GameStates.GameOver) {
             _body2D.velocity = Vector2.zero;
@@ -69,20 +69,19 @@ public class FBMovement : MonoBehaviour {
         _body2D.velocity = new Vector2(_fbSpeed * horiztonalDirection, _fbSpeed * verticalDirection);
     }
 
-    public void BounceFromSG(GameObject ignore) {
+    public void BounceFromSG() {
         if (_gameManager.GameState == GameStates.Playing) {
             if (horiztonalDirection <= 0) {
                 CalculateTan();
                 horiztonalDirection *= -1.0f;
                 ChangeFacingDirection();
                 ChangeRotation();
-                _gameManager.HitSurferGirl = false;
                 NewVelocity();
             }
         }
     }
 
-    private void FBHitTiki(GameObject ignore) {
+    private void FBHitTiki() {
 
         if (_gameManager.GameState == GameStates.Playing) {
             verticalDirection = Random.Range(-1.0f, 1.0f);
@@ -90,19 +89,18 @@ public class FBMovement : MonoBehaviour {
             horiztonalDirection *= -1.0f;
             ChangeFacingDirection();
             ChangeRotation();
-            _gameManager.HitTiki = false;
             NewVelocity();
         }
     }
 
-    private void FBHitEnvironment(GameObject ignore) {
+    private void FBHitEnvironment() {
 
         CalculateTan();
         verticalDirection *= -1.0f;
         ChangeRotation();
     }
 
-    private void FBHitLeftWall(GameObject ignore) {
+    private void FBHitLeftWall() {
         _fbSpeed = 0.0f;
         NewVelocity();
     }

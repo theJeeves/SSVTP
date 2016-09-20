@@ -12,8 +12,10 @@ public enum GameStates {
 public class GameManager : Singleton<GameManager> {
 
     public delegate void GameManagerEvent();
+    public static event GameManagerEvent OnGSPlaying;
     public static event GameManagerEvent OnGameOver;
     public static event GameManagerEvent OnGameWon;
+    public static event GameManagerEvent OnInMenu;
 
     public class PlayerProfile {
 
@@ -31,8 +33,6 @@ public class GameManager : Singleton<GameManager> {
     public PlayerProfile Profile {
         get { return _profile; }
     }
-
-    private float _attackDelay = 1.0f;
 
     private int _maxTikiHealth = 165;
     public int MaxTikiHealth {
@@ -54,46 +54,37 @@ public class GameManager : Singleton<GameManager> {
         get { return _volcanoHealth; }
     }
 
-    private bool _tikiDamageTaken;
-    public bool TikiDamageTaken {
-        get { return _tikiDamageTaken; }
-        set { _tikiDamageTaken = value; }
-    }
-
-    private bool _resetAttack;
-    public bool ResetAttack {
-        get { return _resetAttack; }
-        set { _resetAttack = value; }
+    private bool _gameOver;
+    public bool GameOver {
+        get { return _gameOver; }
+        set { _gameOver = value; }
     }
 
     [SerializeField]
     private GameStates _gameState;
     public GameStates GameState {
         get { return _gameState; }
-        set { _gameState = value; }
-    }
-
-    private bool _hitSurferGirl;
-    public bool HitSurferGirl {
-        get { return _hitSurferGirl; }
-        set { _hitSurferGirl = value; }
-    }
-
-    private bool _hitTiki;
-    public bool HitTiki {
-        get { return _hitTiki; }
-        set { _hitTiki = value; }
-    }
-
-    private bool _hitLeftWall;
-    public bool HitLeftWall {
-        get { return _hitLeftWall; }
-    }
-
-    private bool _gameOver;
-    public bool GameOver {
-        get { return _gameOver; }
-        set { _gameOver = value; }
+        set {
+            _gameState = value;
+            if (value == GameStates.Playing && OnGSPlaying != null) {
+                OnGSPlaying();
+            }
+            else if (value == GameStates.InMenu && OnInMenu != null) {
+                OnInMenu();
+            }
+            else if (value == GameStates.GameOver && OnGameOver != null) {
+                OnGameOver();
+            }
+            else if (value == GameStates.Won && OnGameWon != null) {
+                OnGameWon();
+            }
+            if (value != GameStates.Paused) {
+                Time.timeScale = _defaultTimeScale;
+            }
+            else {
+                Time.timeScale = 0.0f;
+            }
+        }
     }
 
     private float _defaultTimeScale;
@@ -105,74 +96,40 @@ public class GameManager : Singleton<GameManager> {
         ResetGame(WindowIDs.None, WindowIDs.None);
     }
 
-    void Start() {
-        _profile = new PlayerProfile();
-        _profile.DisplayUI = PlayerPrefs.GetInt("DisplayUI") == 1 ? true : false;
-    }
-
-    void Update() {
-        if (_gameState == GameStates.Paused) {
-            Time.timeScale = 0.0f;
-        }
-        else {
-            Time.timeScale = _defaultTimeScale;
-        }
-    }
-
     void OnEnable() {
         FBCollisionEvent.onDamagePlayerCollision += DecrementVolcanoHealth;
-        FBCollisionEvent.onSGCollision += BounceFB;
         FBCollisionEvent.onTikiCollision += DecrementTikiHealth;
         StartMenu.OnStartGame += ResetGame;
     }
 
     void OnDisable() {
         FBCollisionEvent.onDamagePlayerCollision -= DecrementVolcanoHealth;
-        FBCollisionEvent.onSGCollision -= BounceFB;
         FBCollisionEvent.onTikiCollision -= DecrementTikiHealth;
         StartMenu.OnStartGame -= ResetGame;
     }
 
+    void Start() {
+        _profile = new PlayerProfile();
+        _profile.DisplayUI = PlayerPrefs.GetInt("DisplayUI") == 1 ? true : false;
+    }
+
     public void ResetGame(WindowIDs close, WindowIDs open) {
-        _resetAttack = false;
-        _hitTiki = false;
-        _hitSurferGirl = false;
-        _hitLeftWall = false;
         _volcanoHealth = _maxVolcanoHealth;
-        _tikiDamageTaken = false;
         _tikiHealth = _maxTikiHealth;
         _defaultTimeScale = 1.0f;
         _gameOver = false;
     }
 
-    private void BounceFB(GameObject surferGirl) {
-        _hitSurferGirl = true;
-        surferGirl.GetComponent<CollisionState>().BlockedFB = true;
-    }
-
-    private void DecrementVolcanoHealth(GameObject leftWall) {
-        _hitLeftWall = true;
+    private void DecrementVolcanoHealth() {
         if (--_volcanoHealth < 0) {
-            _gameState = GameStates.GameOver;
-            OnGameOver();
-        }
-        else {
-            StartCoroutine(ResetDelay(_attackDelay));
+            GameState = GameStates.GameOver;
         }
     }
 
-    private void DecrementTikiHealth(GameObject tiki) {
-        _hitTiki = true;
+    private void DecrementTikiHealth() {
         _tikiHealth -= 11;
         if (_tikiHealth <= 0) {
-            _gameState = GameStates.Won;
-            OnGameWon();
+            GameState = GameStates.Won;
         }
-    }
-
-    private IEnumerator ResetDelay(float delay) {
-        yield return new WaitForSeconds(delay);
-        _hitLeftWall = false;
-        _resetAttack = true;
     }
 }

@@ -14,7 +14,7 @@ public class Jump : AbstractBehavior {
     }
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 
         if (_gameManager.GameState == GameStates.Playing) {
             if (collisionState.hitSky) {

@@ -29,7 +29,7 @@ public class TikiHealthManager : MonoBehaviour {
         FBCollisionEvent.onTikiCollision -= UpdateHealth;
     }
 
-    private void UpdateHealth(GameObject tiki) {
+    private void UpdateHealth() {
         DecrementValue();
         UpdateColor();
     }

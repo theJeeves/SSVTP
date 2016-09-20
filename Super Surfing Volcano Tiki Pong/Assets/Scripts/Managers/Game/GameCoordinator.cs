@@ -57,7 +57,6 @@ public class GameCoordinator : MonoBehaviour {
         }
 
         SetUIActive(true);
-        _gameManager.ResetAttack = true;
         _gameManager.GameState = GameStates.Playing;
     }
 

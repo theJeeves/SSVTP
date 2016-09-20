@@ -3,7 +3,7 @@ using System.Collections;
 
 public class FBCollisionEvent : MonoBehaviour {
 
-    public delegate void FBCollisionAction(GameObject collisionObject);
+    public delegate void FBCollisionAction();
 
     public static event FBCollisionAction onEnvironmentCollision;
     public static event FBCollisionAction onDamagePlayerCollision;
@@ -16,22 +16,22 @@ public class FBCollisionEvent : MonoBehaviour {
 
         if (collisionObject == "Player") {
             if (onSGCollision != null) {
-                onSGCollision(collider.gameObject);
+                onSGCollision();
             }
         }
         else if (collisionObject == "Sky" || collisionObject == "Ocean") {
             if (onEnvironmentCollision != null) {
-                onEnvironmentCollision(collider.gameObject);
+                onEnvironmentCollision();
             }
         }
         else if (collisionObject == "DamagePlayer") {
             if (onDamagePlayerCollision != null) {
-                onDamagePlayerCollision(collider.gameObject);
+                onDamagePlayerCollision();
             }
         }
         else if (collisionObject == "Tiki") {
             if (onTikiCollision != null) {
-                onTikiCollision(collider.gameObject);
+                onTikiCollision();
             }
         }
     }

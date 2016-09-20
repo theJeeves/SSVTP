@@ -7,20 +7,37 @@ public class ShootFB : MonoBehaviour {
     private GameObject Fireball;
     [SerializeField]
     private GameObject FBSpawnPos;
+    [SerializeField]
+    private float _attackDelay = 1.0f;
 
     private GameManager _gameManager;
 
     void Start() {
         _gameManager = GameManager.Instance;
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    void OnEnable() {
+        GameManager.OnGSPlaying += TikiAttack;
+        FBCollisionEvent.onDamagePlayerCollision += ResetAttack;
+    }
+
+    void OnDisable() {
+        GameManager.OnGSPlaying -= TikiAttack;
+        FBCollisionEvent.onDamagePlayerCollision -= ResetAttack;
+    }
+
+    private void TikiAttack() {
         if (_gameManager.GameState == GameStates.Playing) {
-            if (GameManager.Instance.ResetAttack) {
-                Instantiate(Fireball, FBSpawnPos.transform.position, Quaternion.identity);
-                GameManager.Instance.ResetAttack = false;
-            }
+            Instantiate(Fireball, FBSpawnPos.transform.position, Quaternion.identity);
         }
-	}
+    }
+
+    private void ResetAttack() {
+        StartCoroutine(Reset());
+    }
+
+    private IEnumerator Reset() {
+        yield return new WaitForSeconds(_attackDelay);
+        TikiAttack();
+    }
 }

@@ -9,13 +9,26 @@ public class PlayerAnimationManager : MonoBehaviour {
     private Animator _animator;
     private CollisionState _collisionState;
 
+    void OnEnable() {
+        FBCollisionEvent.onSGCollision += BlockFB;
+    }
+
+    void OnDisable() {
+        FBCollisionEvent.onSGCollision -= BlockFB;
+    }
+
     void Start() {
         _gameManager = GameManager.Instance;
         _animator = GetComponent<Animator>();
         _collisionState = GetComponent<CollisionState>();
     }
 
-    // Update is called once per frame
+    private void BlockFB() {
+        ChangeAnimationState(1);
+        StartCoroutine(BlockAnimationDelay());
+    }
+
+    //Update is called once per frame
     void Update() {
         if (_gameManager.GameState == GameStates.Playing) {
             if (_collisionState.surfing) {
@@ -23,10 +36,6 @@ public class PlayerAnimationManager : MonoBehaviour {
             }
             if (!_collisionState.surfing) {
                 ChangeAnimationState(1);
-            }
-            if (_collisionState.BlockedFB) {
-                ChangeAnimationState(1);
-                StartCoroutine(BlockAnimationDelay());
             }
         }
         else if (_gameManager.GameState == GameStates.InMenu ||
@@ -44,6 +53,5 @@ public class PlayerAnimationManager : MonoBehaviour {
 
     private IEnumerator BlockAnimationDelay() {
         yield return new WaitForSeconds(blockAnimationDuration);
-        _collisionState.BlockedFB = false;
     }
 }
