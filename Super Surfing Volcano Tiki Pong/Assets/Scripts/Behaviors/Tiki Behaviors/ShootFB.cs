@@ -27,7 +27,7 @@ public class ShootFB : MonoBehaviour {
     }
 
     private void TikiAttack() {
-        if (_gameManager.GameState == GameStates.Playing) {
+        if (_gameManager.GameState == GameStates.Playing && !GameObject.Find("Fireball(Clone)")) {
             Instantiate(Fireball, FBSpawnPos.transform.position, Quaternion.identity);
         }
     }
